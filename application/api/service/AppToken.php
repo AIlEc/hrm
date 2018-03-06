@@ -12,6 +12,7 @@ namespace app\api\service;
 use app\api\model\ThirdApp;
 use app\lib\exception\TokenException;
 use think\Cache;
+use think\Request;
 
 class AppToken extends Token
 {
@@ -25,12 +26,14 @@ class AppToken extends Token
                 'errorCode' => 10003
             ]);
         } else {
-            $scope = $app->scope;
-            $uid = $app->id;
             $values = [
-                'scope' => $scope,
-                'uid' => $uid
+                'scope' => $app->scope,
+                'uid' => $app->id
             ];
+            $request = Request::instance();
+            $app->login_ip = $request->ip();
+            $app->setInc('login_time');
+            $app->save();
             $token = $this->saveToCache($values);
             return $token;
         }

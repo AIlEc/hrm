@@ -18,4 +18,15 @@ class ThirdApp extends Base
             ->find();
         return $app;
     }
+
+    //检查用户，避免重复插入
+    public static function checkAccount($ac)
+    {
+        $app = self::where('app_id', '=', $ac)
+            ->find();
+        if(!$app){
+            return false;
+        }
+        return true;
+    }
 }

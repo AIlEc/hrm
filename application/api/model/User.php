@@ -57,4 +57,14 @@ class User extends Model
             ->find();
         return $user;
     }
+
+    public static function checkUniqueAccount($ac)
+    {
+        $user = self::where('account','=',$ac)
+            ->find();
+        if(!$user){
+            return false;
+        }
+        return true;
+    }
 }

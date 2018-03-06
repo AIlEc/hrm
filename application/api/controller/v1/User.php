@@ -62,6 +62,14 @@ class User extends Base
             ]);
         }
 
+        $user = UserModel::checkUniqueAccount($request->param('account'));
+        if($user){
+            throw new UserException([
+                'code' => 403,
+                'msg' => '此用户账号已经被注册'
+            ]);
+        }
+
         try {
             $user = new UserModel();
             $user->username = $request->param('username');

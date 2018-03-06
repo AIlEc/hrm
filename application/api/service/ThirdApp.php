@@ -10,10 +10,19 @@ namespace app\api\service;
 
 
 use app\api\model\ThirdApp as ThirdModel;
+use app\lib\exception\ThirdException;
+
 class ThirdApp
 {
     public static function createThird($data)
     {
+        $app = ThirdModel::checkAccount($data['account']);
+        if($app){
+           throw new ThirdException([
+               'code' => 403,
+               'msg' => '管理员不可重复添加'
+           ]);
+        }
         $third = new ThirdModel();
         $third->app_id = $data['account'];
         $third->app_secret = $data['password'];
